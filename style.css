@@ -51,11 +51,24 @@ button { font: inherit; color: inherit; }
   padding: clamp(2.5rem, 7vw, 5.5rem) 1rem 2rem;
   text-align: center;
 }
+/* Effet du titre : chaque mot défile dans les polices des sites */
+.mot { position: relative; display: inline-block; }
+.mot-fixe { visibility: hidden; }
+.mot-anime {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%);
+  white-space: nowrap;
+}
+.mot.fini .mot-fixe { visibility: visible; }
+.mot.fini .mot-anime { display: none; }
 .signature { margin: 0 0 1.25rem; font-weight: 500; color: var(--gris); }
 .titre {
-  margin: 0;
+  max-width: 14ch;
+  margin: 0 auto;
   font-weight: 600;
-  font-size: clamp(2.6rem, 7.5vw, 6.4rem);
+  font-size: clamp(2.6rem, 7vw, 6rem);
   line-height: 0.95;
   letter-spacing: -0.035em;
 }
@@ -243,7 +256,7 @@ a.nom { text-decoration: none; }
   .carte .vignettes { justify-content: flex-start; }
 
   .tete { padding: 2.25rem 1rem 1.25rem; }
-  .titre { font-size: clamp(2.5rem, 12vw, 3.4rem); }
+  .titre { font-size: clamp(2.3rem, 11vw, 3.2rem); }
   .intro { font-size: 1rem; margin-top: 1rem; }
   .contact { margin-bottom: 1.25rem; }
   .contact a {
