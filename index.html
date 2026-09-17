@@ -38,8 +38,9 @@
     import { monterPrism } from "./prism.js";
     const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const sombre = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const fond = document.getElementById("fond-prism");
     try {
-      monterPrism(document.getElementById("fond-prism"), {
+      const prism = monterPrism(fond, {
         animationType: "rotate",
         timeScale: calme ? 0 : 0.3,
         height: 3.9,
@@ -52,6 +53,18 @@
         lightMode: !sombre,
         maxDpr: window.innerWidth < 700 ? 0.75 : 1,
       });
+      // Le fond s'efface à mesure qu'on descend, et ne se dessine plus une fois invisible
+      let prevu = false;
+      const estomper = () => {
+        prevu = false;
+        const bas = document.documentElement.scrollHeight - window.innerHeight;
+        const distance = Math.max(1, Math.min(window.innerHeight * 0.9, bas));
+        const opacite = Math.max(0, 1 - window.scrollY / distance);
+        fond.style.opacity = opacite.toFixed(3);
+        if (opacite === 0) prism.pause(); else prism.reprendre();
+      };
+      window.addEventListener("scroll", () => { if (!prevu) { prevu = true; requestAnimationFrame(estomper); } }, { passive: true });
+      estomper();
     } catch (e) {
       document.getElementById("fond-prism").remove();
     }

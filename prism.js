@@ -255,12 +255,13 @@ export function monterPrism(container, {
     io = new IntersectionObserver((entries) => (entries.some((e) => e.isIntersecting) ? startRAF() : stopRAF()));
     io.observe(container);
   }
+  let enPause = false;
   // Onglet masqué : on arrête de dessiner
-  const onVisibility = () => (document.hidden ? stopRAF() : startRAF());
+  const onVisibility = () => (document.hidden || enPause ? stopRAF() : startRAF());
   document.addEventListener("visibilitychange", onVisibility);
   startRAF();
 
-  return function demonter() {
+  const demonter = function () {
     stopRAF();
     ro.disconnect();
     if (io) io.disconnect();
@@ -270,4 +271,7 @@ export function monterPrism(container, {
     window.removeEventListener("blur", onLeave);
     if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
   };
+  demonter.pause = () => { enPause = true; stopRAF(); };
+  demonter.reprendre = () => { enPause = false; if (!document.hidden) startRAF(); };
+  return demonter;
 }
