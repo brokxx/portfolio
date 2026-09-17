@@ -15,6 +15,7 @@
     ["'Archivo', sans-serif", "normal", 700],
     ["'Chakra Petch', sans-serif", "normal", 500],
   ];
+  const PAS = 170; // durée d’affichage de chaque police, en ms
   const texte = titre.textContent.trim();
   titre.setAttribute("aria-label", texte);
   titre.innerHTML = texte
@@ -40,16 +41,16 @@
           anime.style.fontFamily = famille;
           anime.style.fontStyle = style;
           anime.style.fontWeight = graisse;
-        }, 90 * n));
+        }, PAS * n));
       }
-      minuteurs.push(setTimeout(() => mot.classList.add("fini"), 90 * etapes));
+      minuteurs.push(setTimeout(() => mot.classList.add("fini"), PAS * etapes));
     });
   }
 
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(jouer, 250));
   let dernier = 0;
   titre.addEventListener("pointerenter", (e) => {
-    if (e.pointerType !== "mouse" || Date.now() - dernier < 1500) return;
+    if (e.pointerType !== "mouse" || Date.now() - dernier < 2500) return;
     dernier = Date.now();
     jouer();
   });
