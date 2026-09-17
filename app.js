@@ -133,22 +133,5 @@
     bloc.querySelectorAll("[data-capture]").forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
   });
 
-  document.querySelectorAll("[data-filtre]").forEach((b) =>
-    b.addEventListener("click", () => {
-      const f = b.dataset.filtre;
-      document.querySelectorAll("[data-filtre]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-      let premier = null;
-      index.querySelectorAll("li").forEach((l) => {
-        const visible = f === "tous" || l.dataset.groupe === f;
-        l.hidden = !visible;
-        if (visible && !premier) premier = l.dataset.id;
-      });
-      cartes.querySelectorAll(".carte").forEach((c) => {
-        c.hidden = !(f === "tous" || c.dataset.groupe === f);
-      });
-      if (premier && index.querySelector(`[data-id="${actif}"]`).hidden) activer(premier);
-    })
-  );
-
   activer(projets[0].id);
 })();

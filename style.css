@@ -65,7 +65,7 @@ button { font: inherit; color: inherit; }
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
   color: var(--gris);
 }
-.contact { margin: 0 0 2rem; font-size: 1.05rem; }
+.contact { margin: 0 0 2.5rem; font-size: 1.05rem; }
 .contact a, .pied-contact a {
   color: inherit;
   font-weight: 600;
@@ -73,17 +73,6 @@ button { font: inherit; color: inherit; }
   text-underline-offset: 3px;
   white-space: nowrap;
 }
-.filtres { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-.filtres button {
-  border: 1px solid var(--filet);
-  background: transparent;
-  padding: 0.45rem 0.95rem;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.filtres button:hover { background: var(--survol); }
-.filtres button[aria-pressed="true"] { background: var(--encre); color: var(--pierre); border-color: var(--encre); }
 
 /* Scène : les noms en ligne, l'aperçu au centre */
 .scene {
@@ -267,16 +256,6 @@ a.nom { text-decoration: none; }
     color: var(--pierre);
     text-decoration: none;
   }
-  .filtres {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    margin: 0 -1rem;
-    padding: 0.25rem 1rem;
-    scrollbar-width: none;
-  }
-  .filtres::-webkit-scrollbar { display: none; }
-  .filtres button { flex: none; }
 }
 
 .pied {
