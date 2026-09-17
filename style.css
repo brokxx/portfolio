@@ -51,8 +51,21 @@ body {
 @media (prefers-color-scheme: dark) {
   .fond-prism { mix-blend-mode: screen; }
 }
+.fond-prism-mobile { display: none; }
 @media (max-width: 959px) {
   .fond-prism { display: none; }
+  .fond-prism-mobile {
+    display: block;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+  .tete > :not(.fond-prism-mobile):not(.glisser) { position: relative; }
+}
+@media (max-width: 959px) and (prefers-color-scheme: dark) {
+  .fond-prism-mobile { mix-blend-mode: screen; }
 }
 img { display: block; max-width: 100%; height: auto; }
 button { font: inherit; color: inherit; }

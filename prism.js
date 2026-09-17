@@ -19,6 +19,7 @@ export function monterPrism(container, {
   timeScale = 0.5,
   lightMode = false,
   maxDpr = 2,
+  steps = 100,
 } = {}) {
   const H = Math.max(0.001, height);
   const BASE_HALF = Math.max(0.001, baseWidth) * 0.5;
@@ -100,7 +101,7 @@ export function monterPrism(container, {
         wob = mat2(c0, c1, c2, c0);
       }
 
-      const int STEPS = 100;
+      const int STEPS = ${Math.max(8, Math.round(steps))};
       for (int i = 0; i < STEPS; i++) {
         p = vec3(f, z);
         p.xz = p.xz * wob;
@@ -251,13 +252,18 @@ export function monterPrism(container, {
   resize();
 
   let io = null;
+  let enPause = false;
+  let horsEcran = false;
+  const peutDessiner = () => !document.hidden && !enPause && !horsEcran;
   if (suspendWhenOffscreen) {
-    io = new IntersectionObserver((entries) => (entries.some((e) => e.isIntersecting) ? startRAF() : stopRAF()));
+    io = new IntersectionObserver((entries) => {
+      horsEcran = !entries.some((e) => e.isIntersecting);
+      peutDessiner() ? startRAF() : stopRAF();
+    });
     io.observe(container);
   }
-  let enPause = false;
   // Onglet masqué : on arrête de dessiner
-  const onVisibility = () => (document.hidden || enPause ? stopRAF() : startRAF());
+  const onVisibility = () => (peutDessiner() ? startRAF() : stopRAF());
   document.addEventListener("visibilitychange", onVisibility);
   startRAF();
 
@@ -272,6 +278,6 @@ export function monterPrism(container, {
     if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
   };
   demonter.pause = () => { enPause = true; stopRAF(); };
-  demonter.reprendre = () => { enPause = false; if (!document.hidden) startRAF(); };
+  demonter.reprendre = () => { enPause = false; if (peutDessiner()) startRAF(); };
   return demonter;
 }

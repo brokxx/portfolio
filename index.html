@@ -14,6 +14,7 @@
 <body>
   <div class="fond-prism" id="fond-prism" aria-hidden="true"></div>
   <header class="tete">
+    <div class="fond-prism-mobile" id="fond-prism-mobile" aria-hidden="true"></div>
     <p class="signature">Manao Dardailler</p>
     <h1 class="titre" id="titre">Votre site mérite mieux qu’un template.</h1>
     <p class="intro" id="intro">Vitrines pour des thérapeutes, formations en ligne, boutiques et outils de trading, construits en 2026.</p>
@@ -36,41 +37,44 @@
   <script src="app.js"></script>
   <script src="titre.js"></script>
   <script type="module">
-    // Pas de fond Prism sur mobile
-    if (window.matchMedia("(min-width: 960px)").matches) {
-    const { monterPrism } = await import("./prism.js");
     const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const sombre = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const fond = document.getElementById("fond-prism");
+    const reglages = {
+      animationType: "rotate",
+      timeScale: calme ? 0 : 0.3,
+      height: 3.9,
+      baseWidth: 6.3,
+      scale: 3.6,
+      hueShift: -0.0416,
+      colorFrequency: 1,
+      noise: 0.5,
+      glow: 0.6,
+      lightMode: !sombre,
+    };
+    const bureau = window.matchMedia("(min-width: 960px)").matches;
+    const fond = document.getElementById(bureau ? "fond-prism" : "fond-prism-mobile");
     try {
-      const prism = monterPrism(fond, {
-        animationType: "rotate",
-        timeScale: calme ? 0 : 0.3,
-        height: 3.9,
-        baseWidth: 6.3,
-        scale: 3.6,
-        hueShift: -0.0416,
-        colorFrequency: 1,
-        noise: 0.5,
-        glow: 0.6,
-        lightMode: !sombre,
-        maxDpr: 1,
-      });
-      // Le fond s'efface à mesure qu'on descend, et ne se dessine plus une fois invisible
-      let prevu = false;
-      const estomper = () => {
-        prevu = false;
-        const bas = document.documentElement.scrollHeight - window.innerHeight;
-        const distance = Math.max(1, Math.min(window.innerHeight * 0.9, bas));
-        const opacite = Math.max(0, 1 - window.scrollY / distance);
-        fond.style.opacity = opacite.toFixed(3);
-        if (opacite === 0) prism.pause(); else prism.reprendre();
-      };
-      window.addEventListener("scroll", () => { if (!prevu) { prevu = true; requestAnimationFrame(estomper); } }, { passive: true });
-      estomper();
+      const { monterPrism } = await import("./prism.js");
+      if (bureau) {
+        // Ordinateur : fond fixe qui s'efface à mesure qu'on descend
+        const prism = monterPrism(fond, { ...reglages, maxDpr: 1 });
+        let prevu = false;
+        const estomper = () => {
+          prevu = false;
+          const bas = document.documentElement.scrollHeight - window.innerHeight;
+          const distance = Math.max(1, Math.min(window.innerHeight * 0.9, bas));
+          const opacite = Math.max(0, 1 - window.scrollY / distance);
+          fond.style.opacity = opacite.toFixed(3);
+          if (opacite === 0) prism.pause(); else prism.reprendre();
+        };
+        window.addEventListener("scroll", () => { if (!prevu) { prevu = true; requestAnimationFrame(estomper); } }, { passive: true });
+        estomper();
+      } else {
+        // Mobile : seulement derrière le premier écran, en basse résolution, en pause dès qu'il sort de l'écran
+        monterPrism(fond, { ...reglages, noise: 0.3, maxDpr: 0.5, steps: 48, suspendWhenOffscreen: true });
+      }
     } catch (e) {
       fond.remove();
-    }
     }
   </script>
 </body>
