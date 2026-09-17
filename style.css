@@ -51,6 +51,9 @@ body {
 @media (prefers-color-scheme: dark) {
   .fond-prism { mix-blend-mode: screen; }
 }
+@media (max-width: 959px) {
+  .fond-prism { display: none; }
+}
 img { display: block; max-width: 100%; height: auto; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--encre); outline-offset: 3px; }
@@ -242,49 +245,112 @@ a.nom { text-decoration: none; }
 .lien:focus-visible { outline-color: var(--p-encre); }
 .sans-lien { margin: 0; font-size: 0.9rem; opacity: 0.75; }
 
-/* Version mobile : fil de fiches */
-.cartes { display: none; }
+/* Version mobile : un site par écran, défilement magnétique façon TikTok */
+.cartes, .glisser { display: none; }
 @media (max-width: 959px) {
+  html { scroll-snap-type: y mandatory; }
   .index, .vitrine { display: none; }
-  .cartes { display: grid; gap: 1rem; }
-  .carte {
-    padding: 0.625rem;
-    border-radius: 16px;
-    background: var(--p-fond);
-    color: var(--p-encre);
-  }
-  .carte[hidden] { display: none; }
-  .carte .ecran { border-radius: 9px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--p-encre) 14%, transparent); }
-  .carte .infos { padding: 1rem 0.5rem 0.5rem; gap: 0.75rem; grid-template-columns: 1fr; }
-  .carte .vitrine-nom {
-    font-family: var(--p-police);
-    font-weight: var(--p-graisse);
-    font-style: var(--p-style);
-    font-size: calc(1.85rem * var(--p-echelle));
-    letter-spacing: -0.01em;
-  }
-  .carte .meta { margin: 0.25rem 0 0.75rem; }
-  .carte .vitrine-nom a { color: inherit; text-decoration: none; }
-  .carte .lien { display: block; text-align: center; padding: 0.8rem 1rem; }
-  .carte .infos-titre { display: grid; gap: 0.25rem; }
-  .carte .resume { font-size: 1rem; margin-bottom: 0.75rem; }
-  .carte .details div { grid-template-columns: 5.5rem 1fr; }
-  .carte .vignettes { justify-content: flex-start; }
+  .scene { padding: 0; }
+  .cartes { display: block; }
 
-  .tete { padding: 2.25rem 1rem 1.25rem; }
-  .titre { font-size: clamp(2.3rem, 11vw, 3.2rem); }
+  .tete {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 1.25rem 4.5rem;
+    position: relative;
+    scroll-snap-align: start;
+  }
+  .titre { font-size: clamp(2.4rem, 12vw, 3.4rem); }
   .intro { font-size: 1rem; margin-top: 1rem; }
-  .contact { margin-bottom: 1.25rem; }
+  .contact { margin-bottom: 0; }
   .contact a {
     display: block;
     width: fit-content;
-    margin: 0.6rem auto 0;
-    padding: 0.7rem 1.3rem;
+    margin: 0.75rem auto 0;
+    padding: 0.75rem 1.4rem;
     border-radius: 999px;
     background: var(--encre);
     color: var(--pierre);
     text-decoration: none;
   }
+  .glisser {
+    display: block;
+    position: absolute;
+    left: 0; right: 0; bottom: 1.5rem;
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--gris);
+  }
+  .glisser::after {
+    content: "";
+    display: block;
+    width: 0.6rem; height: 0.6rem;
+    margin: 0.5rem auto 0;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    animation: rebond 1.8s ease-in-out infinite;
+  }
+  @keyframes rebond { 50% { transform: translateY(5px) rotate(45deg); } }
+
+  .carte {
+    height: 100svh;
+    padding: 0.5rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .carte-cadre {
+    position: relative;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--p-fond);
+    color: var(--p-encre);
+  }
+  .carte-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .carte-bas {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 5.5rem 1.25rem 1.25rem;
+    background: linear-gradient(to bottom,
+      transparent 0,
+      color-mix(in srgb, var(--p-fond) 80%, transparent) 2.75rem,
+      var(--p-fond) 5rem);
+  }
+  .carte-pos { font-variant-numeric: tabular-nums; opacity: 0.8; }
+  .carte-nom {
+    margin: 0;
+    font-family: var(--p-police);
+    font-weight: var(--p-graisse);
+    font-style: var(--p-style);
+    font-size: calc(2.1rem * var(--p-echelle));
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .carte-nom a { color: inherit; text-decoration: none; }
+  .carte .meta { margin: 0.35rem 0 0.6rem; display: flex; justify-content: space-between; gap: 1rem; }
+  .carte-resume {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .carte .lien { display: block; text-align: center; padding: 0.85rem 1rem; }
+  .carte .sans-lien { padding: 0.85rem 0 0.2rem; text-align: center; }
+
+  .pied { scroll-snap-align: end; }
 }
 
 .pied {

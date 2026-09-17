@@ -24,7 +24,7 @@
   };
   const hote = (url) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-  function fiche(p, mobile) {
+  function fiche(p) {
     const lien = p.url
       ? `<a class="lien" href="${esc(p.url)}" target="_blank" rel="noopener">Ouvrir ${esc(hote(p.url))}</a>`
       : `<p class="sans-lien">${p.domaine ? `Bientôt sur ${esc(p.domaine)}` : "Pas de version publique"}</p>`;
@@ -35,12 +35,12 @@
       : "";
     return `
       <figure class="ecran">
-        <img src="img/${esc(p.captures[0])}.webp" alt="Page d'accueil de ${esc(p.nom)}" width="1200" height="750"${mobile ? ' loading="lazy"' : ""}>
+        <img src="img/${esc(p.captures[0])}.webp" alt="Page d'accueil de ${esc(p.nom)}" width="1200" height="750">
       </figure>
       ${vignettes}
       <div class="infos">
         <div class="infos-titre">
-          <h2 class="vitrine-nom">${mobile && p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.nom)}</a>` : esc(p.nom)}</h2>
+          <h2 class="vitrine-nom">${esc(p.nom)}</h2>
           <p class="meta"><span class="statut" data-statut="${p.statut}">${STATUTS[p.statut]}</span>, ${dateLongue(p.date)}</p>
           ${lien}
         </div>
@@ -75,10 +75,10 @@
     })
     .join("");
 
-  // Version mobile : une fiche par projet, à la suite
+  // Version mobile : un site par écran, avec sa capture mobile en plein cadre
   const cartes = document.getElementById("cartes");
   cartes.innerHTML = projets
-    .map((p) => {
+    .map((p, i) => {
       const style = [
         `--p-police:${p.police}`,
         `--p-graisse:${p.graisse || 400}`,
@@ -86,9 +86,23 @@
         `--p-echelle:${p.echelle || 1}`,
         `--p-fond:${p.fond}`,
         `--p-encre:${p.encre}`,
-        `--p-accent:${p.accent}`,
       ].join(";");
-      return `<article class="carte" data-id="${p.id}" data-groupe="${p.groupe}" style="${esc(style)}">${fiche(p, true)}</article>`;
+      const nom = p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.nom)}</a>` : esc(p.nom);
+      const lien = p.url
+        ? `<a class="lien" href="${esc(p.url)}" target="_blank" rel="noopener">Ouvrir ${esc(hote(p.url))}</a>`
+        : `<p class="sans-lien">${p.domaine ? `Bientôt sur ${esc(p.domaine)}` : "Pas de version publique"}</p>`;
+      return `
+      <article class="carte" style="${esc(style)}">
+        <div class="carte-cadre">
+          <img class="carte-img" src="img/m/${esc(p.captures[0])}.webp" alt="Page d'accueil de ${esc(p.nom)} sur mobile" width="780" height="1688" ${i > 0 ? 'loading="lazy"' : ""}>
+          <div class="carte-bas">
+            <h2 class="carte-nom">${nom}</h2>
+            <p class="meta"><span><span class="statut" data-statut="${p.statut}">${STATUTS[p.statut]}</span>, ${dateLongue(p.date)}</span><span class="carte-pos">${i + 1} / ${projets.length}</span></p>
+            <p class="carte-resume">${esc(p.resume)}</p>
+            ${lien}
+          </div>
+        </div>
+      </article>`;
     })
     .join("");
 
@@ -128,7 +142,7 @@
   document.addEventListener("click", (e) => {
     const v = e.target.closest("[data-capture]");
     if (!v) return;
-    const bloc = v.closest(".vitrine, .carte");
+    const bloc = v.closest(".vitrine");
     bloc.querySelector(".ecran img").src = `img/${v.dataset.capture}.webp`;
     bloc.querySelectorAll("[data-capture]").forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
   });

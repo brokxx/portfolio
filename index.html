@@ -18,6 +18,7 @@
     <h1 class="titre" id="titre">Votre site mérite mieux qu’un template.</h1>
     <p class="intro" id="intro">Vitrines pour des thérapeutes, formations en ligne, boutiques et outils de trading, construits en 2026.</p>
     <p class="contact">Un site à créer ? Envoyez-moi un message au <a href="sms:+33621607452">06 21 60 74 52</a></p>
+    <p class="glisser">Glissez vers le haut pour voir les sites</p>
   </header>
 
   <main class="scene">
@@ -35,7 +36,9 @@
   <script src="app.js"></script>
   <script src="titre.js"></script>
   <script type="module">
-    import { monterPrism } from "./prism.js";
+    // Pas de fond Prism sur mobile
+    if (window.matchMedia("(min-width: 960px)").matches) {
+    const { monterPrism } = await import("./prism.js");
     const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const sombre = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const fond = document.getElementById("fond-prism");
@@ -51,7 +54,7 @@
         noise: 0.5,
         glow: 0.6,
         lightMode: !sombre,
-        maxDpr: window.innerWidth < 700 ? 0.75 : 1,
+        maxDpr: 1,
       });
       // Le fond s'efface à mesure qu'on descend, et ne se dessine plus une fois invisible
       let prevu = false;
@@ -66,7 +69,8 @@
       window.addEventListener("scroll", () => { if (!prevu) { prevu = true; requestAnimationFrame(estomper); } }, { passive: true });
       estomper();
     } catch (e) {
-      document.getElementById("fond-prism").remove();
+      fond.remove();
+    }
     }
   </script>
 </body>
