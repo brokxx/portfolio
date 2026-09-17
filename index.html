@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manao Dardailler, sites web</title>
+  <meta name="description" content="Les sites et applications web réalisés par Manao Dardailler : vitrines, formations en ligne, boutiques et outils crypto.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2316181D'/><rect x='7' y='9' width='18' height='3' fill='%23FF6B2C'/><rect x='7' y='15' width='12' height='3' fill='%23C9A24A'/><rect x='7' y='21' width='15' height='3' fill='%2350D2C1'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Bricolage+Grotesque:opsz,wght@12..96,700&family=Caveat:wght@600&family=Chakra+Petch:wght@500&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Familjen+Grotesk:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400&family=IM+Fell+English:ital@1&family=Inter:wght@600&family=Instrument+Serif:ital@1&family=Manrope:wght@700&family=Montserrat:wght@700&family=Space+Grotesk:wght@600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="tete">
+    <p class="signature">Manao Dardailler</p>
+    <h1 class="titre">Chaque site a sa voix.</h1>
+    <p class="intro" id="intro">Vitrines pour des thérapeutes, formations en ligne, boutiques et outils de trading, construits en 2026.</p>
+    <p class="contact">Un site à créer ? Appelez-moi au <a href="tel:+33621607452">06 21 60 74 52</a></p>
+    <nav class="filtres" aria-label="Filtrer les projets">
+      <button type="button" data-filtre="tous" aria-pressed="true">Tous</button>
+      <button type="button" data-filtre="vitrines" aria-pressed="false">Vitrines et formations</button>
+      <button type="button" data-filtre="boutiques" aria-pressed="false">Boutiques et marques</button>
+      <button type="button" data-filtre="crypto" aria-pressed="false">Crypto et applications</button>
+    </nav>
+  </header>
+
+  <main class="scene">
+    <ol class="index" id="index" aria-label="Projets"></ol>
+    <section class="vitrine" id="vitrine" aria-live="polite"></section>
+  </main>
+
+  <footer class="pied">
+    <p class="pied-contact">Manao Dardailler, <a href="tel:+33621607452">06 21 60 74 52</a></p>
+    <p>Captures prises le 17 septembre 2026 sur les sites en ligne ou sur les versions locales.</p>
+  </footer>
+
+  <script src="projets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
