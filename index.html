@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="fond-prism" id="fond-prism" aria-hidden="true"></div>
   <header class="tete">
     <p class="signature">Manao Dardailler</p>
     <h1 class="titre" id="titre">Votre site mérite mieux qu’un template.</h1>
@@ -33,5 +34,27 @@
   <script src="projets.js"></script>
   <script src="app.js"></script>
   <script src="titre.js"></script>
+  <script type="module">
+    import { monterPrism } from "./prism.js";
+    const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sombre = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    try {
+      monterPrism(document.getElementById("fond-prism"), {
+        animationType: "rotate",
+        timeScale: calme ? 0 : 0.3,
+        height: 3.9,
+        baseWidth: 6.3,
+        scale: 3.6,
+        hueShift: -0.0416,
+        colorFrequency: 1,
+        noise: 0.5,
+        glow: 0.6,
+        lightMode: !sombre,
+        maxDpr: window.innerWidth < 700 ? 0.75 : 1,
+      });
+    } catch (e) {
+      document.getElementById("fond-prism").remove();
+    }
+  </script>
 </body>
 </html>
