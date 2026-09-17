@@ -61,6 +61,7 @@ body {
     overflow: hidden;
     pointer-events: none;
     mix-blend-mode: multiply;
+    opacity: 0.5;
   }
   .tete > :not(.fond-prism-mobile):not(.glisser) { position: relative; }
 }
@@ -315,29 +316,26 @@ a.nom { text-decoration: none; }
     scroll-snap-stop: always;
   }
   .carte-cadre {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     border-radius: 20px;
     overflow: hidden;
     background: var(--p-fond);
     color: var(--p-encre);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--encre) 10%, transparent);
   }
   .carte-img {
-    position: absolute;
-    inset: 0;
+    flex: 1 1 auto;
+    min-height: 0;
     width: 100%;
-    height: 100%;
     object-fit: cover;
     object-position: top;
   }
   .carte-bas {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    padding: 5.5rem 1.25rem 1.25rem;
-    background: linear-gradient(to bottom,
-      transparent 0,
-      color-mix(in srgb, var(--p-fond) 80%, transparent) 2.75rem,
-      var(--p-fond) 5rem);
+    flex: none;
+    padding: 0.9rem 1.25rem 1.1rem;
+    border-top: 1px solid color-mix(in srgb, var(--p-encre) 14%, transparent);
   }
   .carte-pos { font-variant-numeric: tabular-nums; opacity: 0.8; }
   .carte-nom {
@@ -345,22 +343,22 @@ a.nom { text-decoration: none; }
     font-family: var(--p-police);
     font-weight: var(--p-graisse);
     font-style: var(--p-style);
-    font-size: calc(2.1rem * var(--p-echelle));
+    font-size: calc(1.9rem * var(--p-echelle));
     line-height: 1.1;
     letter-spacing: -0.01em;
   }
   .carte-nom a { color: inherit; text-decoration: none; }
   .carte .meta { margin: 0.35rem 0 0.6rem; display: flex; justify-content: space-between; gap: 1rem; }
   .carte-resume {
-    margin: 0 0 1rem;
+    margin: 0 0 0.85rem;
     font-size: 0.95rem;
     line-height: 1.45;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .carte .lien { display: block; text-align: center; padding: 0.85rem 1rem; }
+  .carte .lien { display: block; text-align: center; padding: 0.75rem 1rem; }
   .carte .sans-lien { padding: 0.85rem 0 0.2rem; text-align: center; }
 
   .pied { scroll-snap-align: end; }
