@@ -87,7 +87,7 @@ button { font: inherit; color: inherit; }
 
 /* Scène : les noms en ligne, l'aperçu au centre */
 .scene {
-  max-width: 1240px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 3vw, 2rem);
 }
@@ -121,7 +121,33 @@ button { font: inherit; color: inherit; }
 .nom:hover { color: var(--encre); background: var(--survol); }
 .nom[aria-pressed="true"] { background: var(--p-fond); color: var(--p-encre); }
 
-/* Aperçu central */
+@media (min-width: 960px) {
+  .scene {
+    display: grid;
+    grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.5vw, 2.5rem);
+    align-items: start;
+  }
+  .index {
+    position: sticky;
+    top: 1.25rem;
+    margin: 0;
+    padding: 0.5rem 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0.15rem;
+  }
+  .index .nom {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-size: calc(clamp(1.2rem, 1.6vw, 1.6rem) * var(--p-echelle));
+    padding: 0.4rem 0.75rem 0.5rem;
+  }
+}
+
+/* Aperçu */
 .vitrine {
   padding: clamp(0.75rem, 2vw, 1.5rem);
   border-radius: 18px;
@@ -157,7 +183,7 @@ button { font: inherit; color: inherit; }
   gap: 1rem 2.5rem;
   padding: 1.5rem clamp(0.25rem, 1.5vw, 1rem) 0.5rem;
 }
-@media (min-width: 820px) {
+@media (min-width: 820px) and (max-width: 959px), (min-width: 1200px) {
   .infos { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
 }
 .vitrine-nom { margin: 0; font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-weight: 600; line-height: 1.15; }
