@@ -24,7 +24,7 @@
   };
   const hote = (url) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-  function fiche(p) {
+  function fiche(p, mobile) {
     const lien = p.url
       ? `<a class="lien" href="${esc(p.url)}" target="_blank" rel="noopener">Ouvrir ${esc(hote(p.url))}</a>`
       : `<p class="sans-lien">${p.domaine ? `Bientôt sur ${esc(p.domaine)}` : "Pas de version publique"}</p>`;
@@ -35,12 +35,12 @@
       : "";
     return `
       <figure class="ecran">
-        <img src="img/${esc(p.captures[0])}.webp" alt="Page d'accueil de ${esc(p.nom)}" width="1200" height="750">
+        <img src="img/${esc(p.captures[0])}.webp" alt="Page d'accueil de ${esc(p.nom)}" width="1200" height="750"${mobile ? ' loading="lazy"' : ""}>
       </figure>
       ${vignettes}
       <div class="infos">
         <div class="infos-titre">
-          <h2 class="vitrine-nom">${esc(p.nom)}</h2>
+          <h2 class="vitrine-nom">${mobile && p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.nom)}</a>` : esc(p.nom)}</h2>
           <p class="meta"><span class="statut" data-statut="${p.statut}">${STATUTS[p.statut]}</span>, ${dateLongue(p.date)}</p>
           ${lien}
         </div>
@@ -68,8 +68,27 @@
       ].join(";");
       return `
       <li data-id="${p.id}" data-groupe="${p.groupe}" style="${esc(style)}">
-        <button type="button" class="nom" aria-pressed="false" aria-controls="vitrine">${esc(p.nom)}</button>
+        ${p.url
+          ? `<a class="nom" href="${esc(p.url)}" target="_blank" rel="noopener" aria-current="false">${esc(p.nom)}</a>`
+          : `<button type="button" class="nom" aria-current="false" aria-controls="vitrine">${esc(p.nom)}</button>`}
       </li>`;
+    })
+    .join("");
+
+  // Version mobile : une fiche par projet, à la suite
+  const cartes = document.getElementById("cartes");
+  cartes.innerHTML = projets
+    .map((p) => {
+      const style = [
+        `--p-police:${p.police}`,
+        `--p-graisse:${p.graisse || 400}`,
+        `--p-style:${p.italique ? "italic" : "normal"}`,
+        `--p-echelle:${p.echelle || 1}`,
+        `--p-fond:${p.fond}`,
+        `--p-encre:${p.encre}`,
+        `--p-accent:${p.accent}`,
+      ].join(";");
+      return `<article class="carte" data-id="${p.id}" data-groupe="${p.groupe}" style="${esc(style)}">${fiche(p, true)}</article>`;
     })
     .join("");
 
@@ -80,7 +99,7 @@
     if (!p || actif === id) return;
     actif = id;
     index.querySelectorAll("li").forEach((l) =>
-      l.querySelector(".nom").setAttribute("aria-pressed", String(l.dataset.id === id))
+      l.querySelector(".nom").setAttribute("aria-current", String(l.dataset.id === id))
     );
     vitrine.style.setProperty("--p-fond", p.fond);
     vitrine.style.setProperty("--p-encre", p.encre);
@@ -92,7 +111,8 @@
   }
 
   index.addEventListener("click", (e) => {
-    const b = e.target.closest(".nom");
+    // Les noms des sites en ligne sont des liens : le navigateur ouvre le site
+    const b = e.target.closest("button.nom");
     if (b) activer(b.parentElement.dataset.id);
   });
   index.addEventListener("pointerover", (e) => {
@@ -105,11 +125,12 @@
   });
 
   // Bascule entre les captures d'un même projet
-  vitrine.addEventListener("click", (e) => {
+  document.addEventListener("click", (e) => {
     const v = e.target.closest("[data-capture]");
     if (!v) return;
-    vitrine.querySelector(".ecran img").src = `img/${v.dataset.capture}.webp`;
-    vitrine.querySelectorAll("[data-capture]").forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
+    const bloc = v.closest(".vitrine, .carte");
+    bloc.querySelector(".ecran img").src = `img/${v.dataset.capture}.webp`;
+    bloc.querySelectorAll("[data-capture]").forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
   });
 
   document.querySelectorAll("[data-filtre]").forEach((b) =>
@@ -121,6 +142,9 @@
         const visible = f === "tous" || l.dataset.groupe === f;
         l.hidden = !visible;
         if (visible && !premier) premier = l.dataset.id;
+      });
+      cartes.querySelectorAll(".carte").forEach((c) => {
+        c.hidden = !(f === "tous" || c.dataset.groupe === f);
       });
       if (premier && index.querySelector(`[data-id="${actif}"]`).hidden) activer(premier);
     })
