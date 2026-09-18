@@ -20,7 +20,7 @@
   titre.setAttribute("aria-label", texte);
   titre.innerHTML = texte
     .split(" ")
-    .map((m) => `<span class="mot fini" aria-hidden="true"><span class="mot-fixe">${m}</span><span class="mot-anime">${m}</span></span>`)
+    .map((m) => `<span class="mot fini${m.startsWith("template") ? " mot-accent" : ""}" aria-hidden="true"><span class="mot-fixe">${m}</span><span class="mot-anime">${m}</span></span>`)
     .join(" ");
 
   const mots = [...titre.querySelectorAll(".mot")];

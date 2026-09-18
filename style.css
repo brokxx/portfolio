@@ -90,6 +90,14 @@ button { font: inherit; color: inherit; }
   white-space: nowrap;
 }
 .mot.fini .mot-fixe { visibility: visible; }
+/* « template » se pose dans une autre police une fois l'animation finie */
+.mot-accent .mot-fixe {
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.14em;
+  letter-spacing: -0.015em;
+}
 .mot.fini .mot-anime { display: none; }
 .signature { margin: 0 0 1.25rem; font-weight: 500; color: var(--gris); }
 .titre {
